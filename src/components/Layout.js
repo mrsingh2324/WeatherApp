@@ -12,6 +12,12 @@ const Layout = () => {
   const [city, setCity] = useState("New Delhi");
   const [search, setSearch] = useState("New Delhi");
 
+  const kelvinToCelsius = (temp) => {
+    return Math.round(temp - 273.15);
+  };
+
+  // Update the state variables with the converted temperature values
+
   const state = encodeURIComponent(city);
   const handleKeyDown = (e) => {
     if (e.keyCode === 13) {
@@ -26,15 +32,15 @@ const Layout = () => {
       .get(apiUrl)
       .then((response) => {
         console.log(response);
-        setTemp(response.data.main.temp);
-        setTemp_Max(response.data.main.temp_max);
-        setTemp_Min(response.data.main.temp_min);
+        setTemp(kelvinToCelsius(response.data.main.temp));
+        setTemp_Max(kelvinToCelsius(response.data.main.temp_max));
+        setTemp_Min(kelvinToCelsius(response.data.main.temp_min));
+        setFeel(kelvinToCelsius(response.data.main.feels_like));
+
         setPressure(response.data.main.pressure);
         setHumidity(response.data.main.humidity);
         setSpeed(response.data.wind.speed);
-        setFeel(response.data.main.feels_like);
-
-        console.log(temp);
+        // setFeel(response.data.main.feels_like);
       })
       .catch((error) => {
         console.error("Error fetching weather data:", error);
@@ -90,7 +96,7 @@ const Layout = () => {
             </div>
             <div>
               <p className="text-gray-700">Pressure :</p>
-              <p className="text-lg font-bold">{pressure} </p>
+              <p className="text-lg font-bold">{pressure} Pa </p>
             </div>
           </div>
         </div>
